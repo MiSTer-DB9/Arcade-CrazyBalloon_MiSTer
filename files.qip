@@ -11,3 +11,5 @@ set_global_assignment -name VHDL_FILE rtl/CrazyBalloon_video.vhd
 set_global_assignment -name VHDL_FILE rtl/ne555v.vhd
 set_global_assignment -name VHDL_FILE rtl/samples.vhd
 set_global_assignment -name SYSTEMVERILOG_FILE "Arcade-CrazyBalloon.sv"
+set_global_assignment -name VERILOG_FILE rtl/joydb9md.v
+set_global_assignment -name VERILOG_FILE rtl/joydb15.v
