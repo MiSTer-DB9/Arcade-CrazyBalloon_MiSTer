@@ -4,7 +4,7 @@
 set -euo pipefail
 
 UPSTREAM_REPO="https://github.com/MiSTer-devel/Arcade-CrazyBalloon_MiSTer.git"
-CORE_NAME="Arcade-MarioBros"
+CORE_NAME="Arcade-CrazyBalloon"
 MAIN_BRANCH="master"
 
 echo "Fetching upstream:"
