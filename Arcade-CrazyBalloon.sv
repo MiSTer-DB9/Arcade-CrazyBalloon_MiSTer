@@ -58,6 +58,7 @@ module emu
 	input  [11:0] HDMI_WIDTH,
 	input  [11:0] HDMI_HEIGHT,
 	output        HDMI_FREEZE,
+	output        HDMI_BLACKOUT,
 
 `ifdef MISTER_FB
 	// Use framebuffer in DDRAM
@@ -186,6 +187,7 @@ assign AUDIO_MIX = 0;
 assign VGA_F1    = 0;
 assign VGA_SCALER= 0;
 assign HDMI_FREEZE = 0;
+assign HDMI_BLACKOUT = 0;
 assign FB_FORCE_BLANK = 0;
 assign VGA_DISABLE = 0;
 
@@ -268,7 +270,6 @@ wire  [7:0] ioctl_index;
 wire        ioctl_wr;
 wire [24:0] ioctl_addr;
 wire  [7:0] ioctl_dout;
-
 
 wire [21:0] gamma_bus;
 
