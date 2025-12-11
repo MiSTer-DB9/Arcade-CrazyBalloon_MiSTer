@@ -63,7 +63,8 @@ begin
 	AudioClock : work.NE555V
 	generic map(
 	 freq_in  	=> 9987000,
-	 freq_out 	=> 48000.0
+	 freq_out 	=> 48000.0,
+	 duty       => 0
 	)
 	port map(
 		reset 	=> '1',
@@ -119,27 +120,28 @@ begin
 		end if;
 	end process;
 
-	process (AUDIO_CLK)
+	process (CLK)
 	begin
-		if rising_edge(AUDIO_CLK) then
-			if I_MUSIC_ON='1' then
-				MUSIC_OUT <= (W_SDAT1 + W_SDAT2);
-			else
-				MUSIC_OUT <= (others => '0');
-			end if;
+		if rising_edge(CLK) then
+			if AUDIO_CLK='1' then
+				if I_MUSIC_ON='1' then
+					MUSIC_OUT <= (W_SDAT1 + W_SDAT2);
+				else
+					MUSIC_OUT <= (others => '0');
+				end if;
 
-			if W_4E_Q(1)='1' then
-				W_SDAT1 <= x"2a";
-			else
-				W_SDAT1 <= (others => '0');
-			end if;
+				if W_4E_Q(1)='1' then
+					W_SDAT1 <= x"2a";
+				else
+					W_SDAT1 <= (others => '0');
+				end if;
 
-			if W_4E_Q(2)='1' then
-				W_SDAT2 <= x"69";
-			else
-				W_SDAT2 <= (others => '0');
+				if W_4E_Q(2)='1' then
+					W_SDAT2 <= x"69";
+				else
+					W_SDAT2 <= (others => '0');
+				end if;
 			end if;
-
 		end if;
 	end process;
 
@@ -229,37 +231,38 @@ begin
 				SAMPLE_PLAY <= '0';
 			else
 
-				-- Explode seems to be one shot, over-rides all others?
+				-- Explode seems to be one shot, over-rides all others
 				if LAST_EXPLODE = '1' and I_EXPLODE='0' then
 					SAMPLE_PLAY <= '1';
 					SAMPLE_ADDR <= x"7341";
 					SAMPLE_END  <= x"893E";
-				end if;
-
-				if SAMPLE_PLAY='0' then
-					if I_EXPLODE='0' then
-						SAMPLE_PLAY <= '1';
-						-- select sample to play (order of priority, it sometimes overlaps them, but only one plays)
-						if I_BREATH='1' then
-							SAMPLE_ADDR <= x"32A7";
-							SAMPLE_END  <= x"7340";						
-						else
-							if I_APPEAR='1' then
-								SAMPLE_ADDR <= x"0000";
-								SAMPLE_END  <= x"32A6";
+				else
+					if SAMPLE_PLAY='0' then
+						if I_EXPLODE='0' then
+							SAMPLE_PLAY <= '1';
+							-- select sample to play (order of priority, it sometimes overlaps them, but only one plays)
+							if I_BREATH='1' then
+								SAMPLE_ADDR <= x"32A7";
+								SAMPLE_END  <= x"7340";						
+							else
+								if I_APPEAR='1' then
+									SAMPLE_ADDR <= x"0000";
+									SAMPLE_END  <= x"32A6";
+								end if;
 							end if;
 						end if;
-					end if;
-					SAMPLE_OUT <= (others => '0');
-				else
-					SAMPLE_OUT <= SAMPLE_DATA;
-					
-					if SAMPLE_ADDR = SAMPLE_END then
-						SAMPLE_PLAY <= '0';
+						SAMPLE_OUT <= (others => '0');
 					else
-						SAMPLE_ADDR <= SAMPLE_ADDR + '1';
-					end if;				
+						SAMPLE_OUT <= SAMPLE_DATA;
+						
+						if SAMPLE_ADDR = SAMPLE_END then
+							SAMPLE_PLAY <= '0';
+						else
+							SAMPLE_ADDR <= SAMPLE_ADDR + '1';
+						end if;				
+					end if;
 				end if;
+
 				-- Save last setting
 				LAST_EXPLODE <= I_EXPLODE;
 			end if;
