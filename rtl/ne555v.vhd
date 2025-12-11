@@ -15,7 +15,7 @@ entity NE555V is
 	generic (
 		freq_in  : integer := 48000;
       freq_out : real := 4000.0;
-      duty     : integer := 50
+      duty     : integer := 50	-- 0 duty will generate an enable signal for one clock pulse
    );
 	port (
 		reset   : in  std_logic;  -- reset controller
