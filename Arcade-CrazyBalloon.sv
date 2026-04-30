@@ -319,11 +319,9 @@ wire  [7:0] ioctl_dout;
 wire [21:0] gamma_bus;
 
 // CO S2 S1 U D L R 
-// [MiSTer-DB9-Pro BEGIN] - DB controllers muted while OSD is open
-wire [31:0] joy1 = joydb_1ena ? (OSD_STATUS ? 32'b0 : {joydb_1[11]|(joydb_1[10]&joydb_1[5]),joydb_1[9],joydb_1[10],joydb_1[3:0]}) : joy1_USB;
-// [MiSTer-DB9-Pro END]
-// [MiSTer-DB9-Pro BEGIN] - DB controllers muted while OSD is open
-wire [31:0] joy2 = joydb_2ena ? (OSD_STATUS ? 32'b0 : {joydb_2[11]|(joydb_2[10]&joydb_2[5]),joydb_2[10],joydb_2[9],joydb_2[3:0]}) : joydb_1ena ? joy1_USB : joy2_USB;
+// [MiSTer-DB9-Pro BEGIN] - DB controllers muted while OSD is open; Start 2P via combo (was on DB15 button 6 = F)
+wire [31:0] joy1 = joydb_1ena ? (OSD_STATUS ? 32'b0 : {joydb_1[9],joydb_1[11]|(joydb_1[10]&joydb_1[5]),joydb_1[10],joydb_1[3:0]}) : joy1_USB;
+wire [31:0] joy2 = joydb_2ena ? (OSD_STATUS ? 32'b0 : {joydb_2[9],joydb_2[11]|(joydb_2[10]&joydb_2[5]),joydb_2[10],joydb_2[3:0]}) : joydb_1ena ? joy1_USB : joy2_USB;
 // [MiSTer-DB9-Pro END]
 
 
